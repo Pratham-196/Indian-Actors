@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+  <title>Indian Actors</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <h1> Indian Actors </h1>
+  </header>
+
+  <div class="controls">
+    <input type="text" id="searchInput" placeholder="Search person...">
+    <button onclick="addPerson()">Add Person</button>
+  </div>
+
+  <main class="card-container" id="cardContainer">
+
+  </main>
+
+  <script>
+    const container = document.getElementById('cardContainer');
+const searchInput = document.getElementById('searchInput');
+
+let persons = JSON.parse(localStorage.getItem('persons')) || [
+    {
+        "name": "Amitabh Bachchan",
+        "description": "Legendary Bollywood actor known as the 'Shahenshah'.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Indian_actor_Amitabh_Bachchan.jpg/500px-Indian_actor_Amitabh_Bachchan.jpg"
+    },
+    {
+        "name": "Deepika Padukone",
+        "description": "Popular Bollywood actress and global fashion icon.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Deepika_Padukone_Cannes_2018_%28cropped%29.jpg/375px-Deepika_Padukone_Cannes_2018_%28cropped%29.jpg"
+    },
+    {
+        "name": "Ranbir Kapoor",
+        "description": "Award-winning Bollywood actor.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/d/d2/Ranbir_Kapoor_promoting_Brahmastra.jpg"
+    },
+    {
+        "name": "Priyanka Chopra",
+        "description": "Bollywood actress and Miss World 2000, now global star.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/4/45/Priyanka_Chopra_at_Bulgary_launch%2C_2024_%28cropped%29.jpg"
+    },
+    {
+        "name": "Shah Rukh Khan",
+        "description": "The 'King of Bollywood', known for his romantic roles.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/6/6e/Shah_Rukh_Khan_graces_the_launch_of_the_new_Santro.jpg"
+    },
+    {
+        "name": "Tamannaah Bhatia",
+        "description": "Actress across Bollywood and South Indian films.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Tamannaah_Bhatia_at_a_song_launch_from_the_film_Vedaa_%28cropped%29.jpg/375px-Tamannaah_Bhatia_at_a_song_launch_from_the_film_Vedaa_%28cropped%29.jpg"
+    },
+    {
+        "name": "Hrithik Roshan",
+        "description": "Renowned for dance and versatile acting in Bollywood.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Hrithik_at_Rado_launch.jpg/375px-Hrithik_at_Rado_launch.jpg"
+    },
+    {
+        "name": "Rashmika Mandanna",
+        "description": "South Indian actress known for 'Pushpa' and Hindi debut.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Rashmika-Mandanna_at_the_music_launch_of_Chhaava_%28cropped%29.jpg"
+    },
+    {
+        "name": "Aamir Khan",
+        "description": "Actor and director known for impactful storytelling.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Aamir_Khan_in_2014_%28cropped%29.jpg/500px-Aamir_Khan_in_2014_%28cropped%29.jpg"
+    },
+    {
+        "name": "Kiara Advani",
+        "description": "Popular for roles in 'Kabir Singh' and 'Shershaah'.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Kiara_Advani_snapped_at_the_screening_of_Shershaah_%28cropped%29.jpg/500px-Kiara_Advani_snapped_at_the_screening_of_Shershaah_%28cropped%29.jpg"
+    },
+    {
+        "name": "Salman Khan",
+        "description": "Popular actor known for action-packed blockbusters.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Salman_Khan_in_2023_%281%29_%28cropped%29.jpg/500px-Salman_Khan_in_2023_%281%29_%28cropped%29.jpg"
+    },
+    {
+        "name": "Nayanthara",
+        "description": "Queen of South Indian cinema, recently entered Bollywood.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/8/80/Nayanthara_at_Filmfare_Awards.jpg"
+    },
+    {
+        "name": "Ranveer Singh",
+        "description": "Energetic actor known for dynamic roles and fashion.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/3/32/Ranveer_Singh_in_2023_%281%29_%28cropped%29.jpg"
+    },
+    {
+        "name": "Kriti Sanon",
+        "description": "Rising Bollywood actress and National Award winner.",
+        "image": "http://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Kriti_Sanon_at_Adipurush_pre_release_event_%282%29_%28cropped%29.jpg/500px-Kriti_Sanon_at_Adipurush_pre_release_event_%282%29_%28cropped%29.jpg"
+    },
+    {
+        "name": "Vicky Kaushal",
+        "description": "National Award-winning actor known for 'Uri'.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/1/14/Vicky_Kaushal_snapped_promoting_Zara_Hatke_Zara_Bach_Ke_on_the_sets_of_The_Kapil_Sharma_Show_%28cropped%29.jpg"
+    },
+    {
+        "name": "Alia Bhatt",
+        "description": "Top actress known for roles in 'Raazi', 'Gangubai'.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Alia_Bhatt_at_Berlinale_2022_Ausschnitt.jpg/500px-Alia_Bhatt_at_Berlinale_2022_Ausschnitt.jpg"
+    },
+    {
+        "name": "Ayushmann Khurrana",
+        "description": "Actor-singer known for offbeat, socially relevant films.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Ayushmann_Khurrana_promotos_%27Anek%27_in_Delhi_%281%29_%28cropped%29.jpg/375px-Ayushmann_Khurrana_promotos_%27Anek%27_in_Delhi_%281%29_%28cropped%29.jpg"
+    },
+    {
+        "name": "Kangana Ranaut",
+        "description": "Award-winning actress known for bold roles.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Kangana_Ranaut_at_Ira_Khan%27s_wedding_reception_%28cropped%29.jpg/375px-Kangana_Ranaut_at_Ira_Khan%27s_wedding_reception_%28cropped%29.jpg"
+    },
+    {
+        "name": "Rajkummar Rao",
+        "description": "Critically acclaimed Bollywood actor with versatile roles.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Actor_Rajkummar_Rao.jpg/500px-Actor_Rajkummar_Rao.jpg"
+    },
+    {
+        "name": "Anushka Sharma",
+        "description": "Acclaimed for films like NH10, PK, and Sultan.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Anushka_Sharma_promoting_Zero.jpg/375px-Anushka_Sharma_promoting_Zero.jpg"
+    },
+    {
+        "name": "Sidharth Malhotra",
+        "description": "Actor known for action and romantic films.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Sidharth_Malhotra_snapped_during_Indian_Police_Force_promotion.jpg/500px-Sidharth_Malhotra_snapped_during_Indian_Police_Force_promotion.jpg"
+    },
+    {
+        "name": "Shraddha Kapoor",
+        "description": "Popular for Aashiqui 2, Stree, and Chhichhore.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Shraddha_Kapoor_promoting_Street_Dancer_3D.jpg/500px-Shraddha_Kapoor_promoting_Street_Dancer_3D.jpg"
+    },
+    {
+        "name": "Allu Arjun",
+        "description": "South Indian superstar known for 'Pushpa' and dance.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Allu_Arjun_at_Pushpa_2_The_Rule_meet.jpg/500px-Allu_Arjun_at_Pushpa_2_The_Rule_meet.jpg"
+    },
+    {
+        "name": "Taapsee Pannu",
+        "description": "Known for impactful roles in films like Thappad, Pink, and Badla.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/1/15/Taapsee_Pannu_in_March_2022.jpg"
+    },
+    {
+        "name": "Prabhas",
+        "description": "Pan-India actor known for the 'Baahubali' series.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Prabhas_by_Gage_Skidmore.jpg/500px-Prabhas_by_Gage_Skidmore.jpg"
+    },
+    {
+        "name": "Disha Patani",
+        "description": "Fitness icon and Bollywood actress.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/7/75/Photos-Disha-Patani-snapped-at-Myntra-event_%28cropped%29.jpg"
+    },
+    {
+        "name": "Mahesh Babu",
+        "description": "Leading actor in Telugu cinema.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Mahesh_Babu_in_Spyder_%28cropped%29.jpg/500px-Mahesh_Babu_in_Spyder_%28cropped%29.jpg"
+    },
+    {
+        "name": "Sara Ali Khan",
+        "description": "Actress from the Pataudi family, known for 'Kedarnath'.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Sara_Ali_Khan_snapped_promoting_Zara_Hatke_Zara_Bach_Ke_on_the_sets_of_The_Kapil_Sharma_Show_%288%29_%28cropped%29.jpg/375px-Sara_Ali_Khan_snapped_promoting_Zara_Hatke_Zara_Bach_Ke_on_the_sets_of_The_Kapil_Sharma_Show_%288%29_%28cropped%29.jpg"
+    },
+    {
+        "name": "N.T. Rama Rao Jr.",
+        "description": "Famous Telugu actor known for powerful performances.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/N._T._Rama_Rao_Jr._in_2021.jpg/500px-N._T._Rama_Rao_Jr._in_2021.jpg"
+    },
+    {
+        "name": "Rani Mukerji",
+        "description": "Veteran actress known for Black, Mardaani, and Hichki.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Rani_Mukerji_promoting_Hichki_in_2018_%28cropped%29.jpg/375px-Rani_Mukerji_promoting_Hichki_in_2018_%28cropped%29.jpg"
+    },
+    {
+        "name": "Ram Charan",
+        "description": "Star of 'RRR', known for action roles.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Ram_Charan_2024_%28cropped%29.jpg/500px-Ram_Charan_2024_%28cropped%29.jpg"
+    },
+    {
+        "name": "Janhvi Kapoor",
+        "description": "Daughter of Sridevi, known for roles in 'Gunjan Saxena'.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Janhvi_Kapoor_snapped_at_the_press_show_of_Bawaal.jpg/500px-Janhvi_Kapoor_snapped_at_the_press_show_of_Bawaal.jpg"
+    },
+];
+
+function saveToLocalStorage() {
+  localStorage.setItem('persons', JSON.stringify(persons));
+}
+
+function displayCards(filter = '') {
+  container.innerHTML = '';
+  const filtered = persons.filter(person =>
+    person.name.toLowerCase().includes(filter.toLowerCase())
+  );
+
+  filtered.forEach((person, index) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.style.animationDelay = `${index * 0.1}s`;
+    card.innerHTML = `
+      <img src="${person.image}" alt="${person.name}">
+      <h2>${person.name}</h2>
+      <p>${person.description}</p>
+    `;
+    container.appendChild(card);
+  });
+}
+
+
+function addPerson() {
+  const name = prompt("Enter person's name:");
+  const description = prompt('Enter short description:');
+  const image = prompt('Enter image URL:');
+  if (name && description && image) {
+    persons.push({ name, description, image });
+    saveToLocalStorage();
+    displayCards(searchInput.value);
+  }
+}
+
+searchInput.addEventListener('input', () => {
+  displayCards(searchInput.value);
+});
+
+displayCards();
+  </script>
+</body>
+</html>
