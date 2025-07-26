@@ -10,7 +10,6 @@
 
   <div class="controls">
     <input type="text" id="searchInput" placeholder="Search person...">
-    <button onclick="addPerson()">Add Person</button>
   </div>
 
   <main class="card-container" id="cardContainer">
@@ -205,18 +204,6 @@ function displayCards(filter = '') {
     `;
     container.appendChild(card);
   });
-}
-
-
-function addPerson() {
-  const name = prompt("Enter person's name:");
-  const description = prompt('Enter short description:');
-  const image = prompt('Enter image URL:');
-  if (name && description && image) {
-    persons.push({ name, description, image });
-    saveToLocalStorage();
-    displayCards(searchInput.value);
-  }
 }
 
 searchInput.addEventListener('input', () => {
